@@ -1,37 +1,134 @@
-name: Terraform Transit Gateway Module
+name: Terraform GCP MySQL Management Module
 #logo: logo/logo.jpg
 badges:
   - name: Latest Release
-    image: https://img.shields.io/github/release/<owner/repo>.svg?style=for-the-badge
-    url: https://github.com/<owner/repo>/releases/latest
+    image: https://img.shields.io/github/release/cloudopsworks/terraform-module-gcp-mysql-management.svg?style=for-the-badge
+    url: https://github.com/cloudopsworks/terraform-module-gcp-mysql-management/releases/latest
   - name: Last Updated
-    image: https://img.shields.io/github/last-commit/<owner/repo>.svg?style=for-the-badge
-    url: https://github.com/<owner/repo>/commits
+    image: https://img.shields.io/github/last-commit/cloudopsworks/terraform-module-gcp-mysql-management.svg?style=for-the-badge
+    url: https://github.com/cloudopsworks/terraform-module-gcp-mysql-management/commits
 
 license: "APACHE2"
 
 copyrights:
   - name: "Cloud Ops Works LLC"
     url: "https://cloudopsworks.co"
-    year: "2026"
+    year: "2021"
 
-github_repo: <owner/repo>
+github_repo: cloudopsworks/terraform-module-gcp-mysql-management
 
 description: |-
-  <description>
+  Terraform module for managing MySQL users, databases, and privileges on Google Cloud SQL (Cloud SQL for MySQL).
+  Credentials for created users are stored in GCP Secret Manager. Supports direct MySQL connections,
+  Cloud SQL instance lookup, and credential retrieval from an existing Secret Manager secret.
+  Enterprise Hoop integration is available for database access management.
 
-# Introduction to the project
 introduction: |-
-#  This is an introduction.
+  This module provisions MySQL databases and users on a Cloud SQL MySQL instance (or any reachable MySQL endpoint)
+  and stores their credentials as JSON secrets in GCP Secret Manager. It supports three connection modes:
 
-# How to use this project
+  1. **Cloud SQL** — looks up the instance IP via the `google_sql_database_instance` data source.
+  2. **Cloud SQL from Secret** — reads admin credentials from an existing Secret Manager secret.
+  3. **Direct** — connects directly using host/port/username/password supplied as variables.
+
+  Hoop enterprise connections are provisioned as individual Secret Manager secrets per user and
+  exposed via the `hoop_connections` output for downstream consumption by a Hoop management module.
+
 usage: |-
+  ```hcl
+  # terragrunt.hcl
 
-# Example usage
+  terraform {
+    source = "git::https://github.com/cloudopsworks/terraform-module-gcp-mysql-management.git//?ref=v1.0.0"
+  }
+
+  inputs = {
+    # --- Cloud SQL connection (pick one mode) ---
+    cloudsql = {
+      enabled        = true          # (Optional) Enable Cloud SQL mode. Default: false.
+      instance_name  = "my-cloudsql" # (Required when enabled) Cloud SQL instance name.
+      project_id     = ""            # (Optional) GCP project; defaults to current project.
+      from_secret    = false         # (Optional) Read admin creds from Secret Manager. Default: false.
+      secret_id      = ""            # (Required when from_secret=true) Secret Manager secret ID.
+      server_name    = ""            # (Optional) Friendly server name used in secret paths.
+      admin_username = "root"        # (Optional) Admin username. Default: root.
+      admin_password = ""            # (Optional) Admin password.
+      db_name        = "mysql"       # (Optional) Admin database. Default: mysql.
+    }
+
+    # --- Direct connection (alternative to cloudsql) ---
+    direct = {
+      server_name = ""    # (Optional) Friendly server name used in secret paths.
+      host        = ""    # (Required) MySQL host.
+      port        = 3306  # (Optional) MySQL port. Default: 3306.
+      username    = ""    # (Required) Admin username.
+      password    = ""    # (Required) Admin password.
+      db_name     = "mysql" # (Optional) Admin database. Default: mysql.
+    }
+
+    # --- Databases ---
+    databases = {
+      mydb = {
+        name                  = "mydb"              # (Required) Database name.
+        create_owner          = true                # (Optional) Create owner user. Default: false.
+        owner                 = "mydb_owner"        # (Optional) Owner username. Default: <name>_owner.
+        default_character_set = "utf8mb4"           # (Optional) Default: utf8mb4.
+        default_collation     = "utf8mb4_unicode_ci" # (Optional) Default: utf8mb4_unicode_ci.
+        host                  = "%"                 # (Optional) Host for owner. Default: %.
+        tls_option            = "NONE"              # (Optional) NONE, SSL, X509. Default: NONE.
+      }
+    }
+
+    # --- Users ---
+    users = {
+      app_user = {
+        name          = "app_user"  # (Required) MySQL username.
+        grant         = "readwrite" # (Required) owner | readwrite | readonly.
+        db_ref        = "mydb"      # (Optional) Reference to databases key.
+        database_name = ""          # (Optional) Database name when db_ref not set.
+        host          = "%"         # (Optional) Default: %.
+        tls_option    = "NONE"      # (Optional) NONE, SSL, X509. Default: NONE.
+        import        = false       # (Optional) Import existing user. Default: false.
+      }
+    }
+
+    # --- Roles ---
+    roles = {
+      reporting = {
+        name          = "reporting"         # (Optional) Role name; defaults to map key.
+        db_ref        = "mydb"              # (Optional) Reference to databases key.
+        database_name = ""                  # (Optional) Database name when db_ref not set.
+        table_name    = "*"                 # (Optional) Default: *.
+        grant_option  = false               # (Optional) Default: false.
+        grants        = ["SELECT", "SHOW VIEW"] # (Optional) Default: ALL PRIVILEGES.
+      }
+    }
+
+    # --- Hoop (enterprise only) ---
+    hoop = {
+      enabled        = false  # (Optional) Enable Hoop integration. Default: false.
+      agent_id       = ""     # (Required when enterprise) Hoop agent ID.
+      community      = true   # (Optional) true = community (no secrets); false = enterprise. Default: true.
+      import         = false  # (Optional) Import existing Hoop connection. Default: false.
+      tags           = {}     # (Optional) Tags to attach to Hoop connections.
+      access_control = []     # (Optional) Access control list.
+    }
+
+    # --- Misc ---
+    password_rotation_period = 90    # (Optional) Rotation period in days. Default: 90.
+    force_reset              = false # (Optional) Force password reset. Default: false.
+    secrets_kms_key_name     = null  # (Optional) GCP KMS key for secret encryption.
+  }
+  ```
+
 examples: |-
+  See the `usage` section above for a full Terragrunt example.
 
-# How to get started quickly
 quickstart: |-
+  1. Initialise the provider: `make init/gcp`
+  2. Configure `cloudsql` or `direct` in your `inputs.yaml` / Terragrunt inputs.
+  3. Add `databases` and `users` entries.
+  4. Run `terragrunt apply`.
 
 include:
   - "docs/targets.md"

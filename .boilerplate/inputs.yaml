@@ -1,1 +1,79 @@
-# Module configuration
+# Module configuration — terraform-module-gcp-mysql-management
+# All variables defined in variables-mysql.tf are documented here.
+# Follow (Required)/(Optional) inline comments for each key.
+
+# Cloud SQL MySQL connection settings (mutually exclusive with direct).
+cloudsql:
+  enabled: false          # (Optional) Enable Cloud SQL mode. Default: false.
+  instance_name: ""       # (Required when enabled) Cloud SQL instance name.
+  project_id: ""          # (Optional) GCP project ID; defaults to current project.
+  from_secret: false      # (Optional) Read admin credentials from Secret Manager. Default: false.
+  secret_id: ""           # (Required when from_secret=true) Secret Manager secret ID containing JSON credentials.
+  server_name: ""         # (Optional) Friendly server name used in secret path construction.
+  admin_username: "root"  # (Optional) Admin MySQL username. Default: root.
+  admin_password: ""      # (Optional) Admin MySQL password.
+  db_name: "mysql"        # (Optional) Admin database. Default: mysql.
+
+# Direct MySQL connection settings (mutually exclusive with cloudsql).
+direct:
+  server_name: ""   # (Optional) Friendly server name used in secret path construction.
+  host: ""          # (Required) MySQL host or IP address.
+  port: 3306        # (Optional) MySQL port. Default: 3306.
+  username: ""      # (Required) Admin MySQL username.
+  password: ""      # (Required) Admin MySQL password.
+  db_name: "mysql"  # (Optional) Admin database. Default: mysql.
+
+# Map of MySQL databases to create.
+databases: {}
+# Example:
+#   mydb:
+#     name: "mydb"                          # (Required) Database name.
+#     create_owner: false                    # (Optional) Create a dedicated owner user. Default: false.
+#     owner: "mydb_owner"                    # (Optional) Owner username. Default: <name>_owner.
+#     default_character_set: "utf8mb4"       # (Optional) Character set. Default: utf8mb4.
+#     default_collation: "utf8mb4_unicode_ci" # (Optional) Collation. Default: utf8mb4_unicode_ci.
+#     host: "%"                              # (Optional) Host for owner user. Default: %.
+#     tls_option: "NONE"                     # (Optional) NONE | SSL | X509. Default: NONE.
+
+# Map of MySQL users to create.
+users: {}
+# Example:
+#   app_user:
+#     name: "app_user"      # (Required) MySQL username.
+#     grant: "readwrite"    # (Required) Grant type: owner | readwrite | readonly.
+#     db_ref: "mydb"        # (Optional) Reference key in databases map.
+#     database_name: ""     # (Optional) Database name when db_ref is not set.
+#     host: "%"             # (Optional) MySQL host for the user. Default: %.
+#     tls_option: "NONE"    # (Optional) NONE | SSL | X509. Default: NONE.
+#     import: false         # (Optional) Import existing user (skip create). Default: false.
+#     hoop:
+#       access_control: []  # (Optional) Per-user Hoop access control list.
+
+# Map of MySQL privilege sets (roles) to create.
+roles: {}
+# Example:
+#   reporting:
+#     name: "reporting"               # (Optional) Role/user name; defaults to map key.
+#     db_ref: "mydb"                  # (Optional) Reference key in databases map.
+#     database_name: ""               # (Optional) Database name when db_ref is not set.
+#     table_name: "*"                 # (Optional) Table pattern. Default: *.
+#     grant_option: false             # (Optional) Grant option flag. Default: false.
+#     grants: ["SELECT", "SHOW VIEW"] # (Optional) Privilege list. Default: ["ALL PRIVILEGES"].
+
+# Hoop connection settings.
+hoop:
+  enabled: false        # (Optional) Enable Hoop integration. Default: false.
+  agent_id: ""          # (Required when enterprise) Hoop agent ID.
+  community: true       # (Optional) true = community mode (no per-secret provisioning); false = enterprise. Default: true.
+  import: false         # (Optional) Import existing Hoop connection. Default: false.
+  tags: {}              # (Optional) Tags to attach to Hoop connections.
+  access_control: []    # (Optional) Default access control list for all connections.
+
+# (Optional) Password rotation period in days. Default: 90.
+password_rotation_period: 90
+
+# (Optional) Force reset all managed passwords. Default: false.
+force_reset: false
+
+# (Optional) GCP KMS key name for encrypting Secret Manager secrets. Default: null (Google-managed key).
+secrets_kms_key_name: null
