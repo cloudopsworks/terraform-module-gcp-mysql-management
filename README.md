@@ -191,9 +191,9 @@ Available targets:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | 7.28.0 |
-| <a name="provider_mysql"></a> [mysql](#provider\_mysql) | 1.10.6 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.8.1 |
+| <a name="provider_google"></a> [google](#provider\_google) | ~> 7.0 |
+| <a name="provider_mysql"></a> [mysql](#provider\_mysql) | ~> 1.10 |
+| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.4 |
 
 ## Modules
 
