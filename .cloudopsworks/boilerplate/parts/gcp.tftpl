@@ -24,6 +24,15 @@ terraform {
       source  = "hashicorp/google-beta"
       version = "~> 7.0"
     }
+    mysql = {
+          source  = "winebarrel/mysql"
+          version = "~> 1.10"
+        }
+    random = {
+          source  = "hashicorp/random"
+          version = "~> 3.4"
+        }
+
   }
 }
 {{ end }}
