@@ -191,9 +191,9 @@ Available targets:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | ~> 7.0 |
-| <a name="provider_mysql"></a> [mysql](#provider\_mysql) | ~> 1.10 |
-| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.4 |
+| <a name="provider_google"></a> [google](#provider\_google) | 7.28.0 |
+| <a name="provider_mysql"></a> [mysql](#provider\_mysql) | 1.10.6 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.8.1 |
 
 ## Modules
 
@@ -268,21 +268,19 @@ File a GitHub [issue](https://github.com/cloudopsworks/terraform-module-gcp-mysq
 
 
 ## DevOps Tools
-[]()
+[Our Products](https://cloudopsworks.co/products/)
+[CI/CD Blueprint](https://cloudopsworks.co/cicd-blueprint/)
+[Open Source](https://cloudopsworks.co/open-source/)
+
 ## Slack Community
 
 
 ## Newsletter
-
-## Office Hours
-
-## Contributing
+[Resources Directory](https://cloudopsworks.co/resources/)
 
 ### Bug Reports & Feature Requests
 
 Please use the [issue tracker](https://github.com/cloudopsworks/terraform-module-gcp-mysql-management/issues) to report any bugs or file feature requests.
-
-### Developing
 
 
 
@@ -373,4 +371,4 @@ This project is maintained by [Cloud Ops Works LLC][website].
   [share_reddit]: https://reddit.com/submit/?url=https://github.com/cloudopsworks/terraform-module-gcp-mysql-management
   [share_facebook]: https://facebook.com/sharer/sharer.php?u=https://github.com/cloudopsworks/terraform-module-gcp-mysql-management
   [share_email]: mailto:?subject=Terraform+GCP+MySQL+Management+Module&body=https://github.com/cloudopsworks/terraform-module-gcp-mysql-management
-  [beacon]: https://ga-beacon.cloudospworks.co/G-QMZVYYN2VN/cloudopsworks/terraform-module-gcp-mysql-management?pixel&cs=github&cm=readme&an=terraform-module-gcp-mysql-management
+  [beacon]: https://ga-beacon.cloudopsworks.co/G-QMZVYYN2VN/cloudopsworks/terraform-module-gcp-mysql-management?pixel&cs=github&cm=readme&an=terraform-module-gcp-mysql-management
