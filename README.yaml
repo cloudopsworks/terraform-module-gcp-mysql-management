@@ -34,12 +34,34 @@ introduction: |-
   Hoop enterprise connections are provisioned as individual Secret Manager secrets per user and
   exposed via the `hoop_connections` output for downstream consumption by a Hoop management module.
 
+  Database-level resources use the maintained `petoju/mysql` provider.
+
+  **Upgrading from v1.x**
+
+  Version 2.0 changes the MySQL provider source from `winebarrel/mysql` to `petoju/mysql`.
+  Before the first v2.0 plan, back up state and replace the provider address:
+
+  ```shell
+  tofu state replace-provider \
+    registry.opentofu.org/winebarrel/mysql \
+    registry.opentofu.org/petoju/mysql
+  ```
+
+  ```shell
+  terraform state replace-provider \
+    registry.terraform.io/winebarrel/mysql \
+    registry.terraform.io/petoju/mysql
+  ```
+
+  Use the provider addresses reported by `tofu providers` or `terraform providers`. The command
+  updates state identity only and does not recreate the managed MySQL objects.
+
 usage: |-
   ```hcl
   # terragrunt.hcl
 
   terraform {
-    source = "git::https://github.com/cloudopsworks/terraform-module-gcp-mysql-management.git//?ref=v1.0.0"
+    source = "git::https://github.com/cloudopsworks/terraform-module-gcp-mysql-management.git//?ref=v2.0.0"
   }
 
   inputs = {

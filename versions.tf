@@ -20,8 +20,8 @@ terraform {
       version = "~> 7.0"
     }
     mysql = {
-      source  = "winebarrel/mysql"
-      version = "~> 1.10"
+      source  = "petoju/mysql"
+      version = "~> 3.0"
     }
     random = {
       source  = "hashicorp/random"
