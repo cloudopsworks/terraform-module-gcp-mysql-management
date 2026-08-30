@@ -58,6 +58,28 @@ and stores their credentials as JSON secrets in GCP Secret Manager. It supports 
 Hoop enterprise connections are provisioned as individual Secret Manager secrets per user and
 exposed via the `hoop_connections` output for downstream consumption by a Hoop management module.
 
+Database-level resources use the maintained `petoju/mysql` provider.
+
+**Upgrading from v1.x**
+
+Version 2.0 changes the MySQL provider source from `winebarrel/mysql` to `petoju/mysql`.
+Before the first v2.0 plan, back up state and replace the provider address:
+
+```shell
+tofu state replace-provider \
+  registry.opentofu.org/winebarrel/mysql \
+  registry.opentofu.org/petoju/mysql
+```
+
+```shell
+terraform state replace-provider \
+  registry.terraform.io/winebarrel/mysql \
+  registry.terraform.io/petoju/mysql
+```
+
+Use the provider addresses reported by `tofu providers` or `terraform providers`. The command
+updates state identity only and does not recreate the managed MySQL objects.
+
 ## Usage
 
 
@@ -69,7 +91,7 @@ Instead pin to the release tag (e.g. `?ref=vX.Y.Z`) of one of our [latest releas
 # terragrunt.hcl
 
 terraform {
-  source = "git::https://github.com/cloudopsworks/terraform-module-gcp-mysql-management.git//?ref=v1.0.0"
+  source = "git::https://github.com/cloudopsworks/terraform-module-gcp-mysql-management.git//?ref=v2.0.0"
 }
 
 inputs = {
@@ -184,7 +206,7 @@ Available targets:
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.7 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | ~> 7.0 |
 | <a name="requirement_google-beta"></a> [google-beta](#requirement\_google-beta) | ~> 7.0 |
-| <a name="requirement_mysql"></a> [mysql](#requirement\_mysql) | ~> 1.10 |
+| <a name="requirement_mysql"></a> [mysql](#requirement\_mysql) | ~> 3.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.4 |
 
 ## Providers
@@ -192,7 +214,7 @@ Available targets:
 | Name | Version |
 |------|---------|
 | <a name="provider_google"></a> [google](#provider\_google) | ~> 7.0 |
-| <a name="provider_mysql"></a> [mysql](#provider\_mysql) | ~> 1.10 |
+| <a name="provider_mysql"></a> [mysql](#provider\_mysql) | ~> 3.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | ~> 3.4 |
 
 ## Modules
@@ -219,12 +241,12 @@ Available targets:
 | [google_secret_manager_secret_version.hoop_user_user](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_version) | resource |
 | [google_secret_manager_secret_version.owner](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_version) | resource |
 | [google_secret_manager_secret_version.user](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_version) | resource |
-| [mysql_database.this](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/database) | resource |
-| [mysql_grant.owner](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/grant) | resource |
-| [mysql_grant.role](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/grant) | resource |
-| [mysql_grant.user](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/grant) | resource |
-| [mysql_user.owner](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/user) | resource |
-| [mysql_user.user](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/user) | resource |
+| [mysql_database.this](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/database) | resource |
+| [mysql_grant.owner](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/grant) | resource |
+| [mysql_grant.role](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/grant) | resource |
+| [mysql_grant.user](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/grant) | resource |
+| [mysql_user.owner](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/user) | resource |
+| [mysql_user.user](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/user) | resource |
 | [random_password.owner](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [random_password.user](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [google_client_config.current](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/client_config) | data source |

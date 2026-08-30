@@ -5,7 +5,7 @@
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.7 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | ~> 7.0 |
 | <a name="requirement_google-beta"></a> [google-beta](#requirement\_google-beta) | ~> 7.0 |
-| <a name="requirement_mysql"></a> [mysql](#requirement\_mysql) | ~> 1.10 |
+| <a name="requirement_mysql"></a> [mysql](#requirement\_mysql) | ~> 3.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.4 |
 
 ## Providers
@@ -13,7 +13,7 @@
 | Name | Version |
 |------|---------|
 | <a name="provider_google"></a> [google](#provider\_google) | ~> 7.0 |
-| <a name="provider_mysql"></a> [mysql](#provider\_mysql) | ~> 1.10 |
+| <a name="provider_mysql"></a> [mysql](#provider\_mysql) | ~> 3.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | ~> 3.4 |
 
 ## Modules
@@ -40,12 +40,12 @@
 | [google_secret_manager_secret_version.hoop_user_user](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_version) | resource |
 | [google_secret_manager_secret_version.owner](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_version) | resource |
 | [google_secret_manager_secret_version.user](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_version) | resource |
-| [mysql_database.this](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/database) | resource |
-| [mysql_grant.owner](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/grant) | resource |
-| [mysql_grant.role](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/grant) | resource |
-| [mysql_grant.user](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/grant) | resource |
-| [mysql_user.owner](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/user) | resource |
-| [mysql_user.user](https://registry.terraform.io/providers/winebarrel/mysql/latest/docs/resources/user) | resource |
+| [mysql_database.this](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/database) | resource |
+| [mysql_grant.owner](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/grant) | resource |
+| [mysql_grant.role](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/grant) | resource |
+| [mysql_grant.user](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/grant) | resource |
+| [mysql_user.owner](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/user) | resource |
+| [mysql_user.user](https://registry.terraform.io/providers/petoju/mysql/latest/docs/resources/user) | resource |
 | [random_password.owner](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [random_password.user](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [google_client_config.current](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/client_config) | data source |
